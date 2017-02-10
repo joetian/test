@@ -1,0 +1,41 @@
+﻿@model Vidly2.Models.CustomerFormViewModel
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New Customer</h2>
+@* param1: target Action when click Submit, param : controlName*@
+@using (Html.BeginForm("Save", "Customers"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Customer.Name)
+        @Html.TextBoxFor(m => m.Customer.Name, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Customer.Birthday)
+        @Html.TextBoxFor(m => m.Customer.Birthday, "{0:MMM d, yyyy}", new { @class = "form-control" })   
+    </div>
+
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Customer.MembershipTypeId)
+        @Html.DropDownListFor(m => m.Customer.MembershipTypeId, new SelectList(Model.MembershipTypes, "Id", "Name"), "select membership type", new { @class = "form-control" })
+    </div>
+
+    <div class="checkbox">
+        @* checkbox differnt from textbox*@
+        <label>
+            @Html.CheckBoxFor(m => m.Customer.IsSubscriberToNewsLetter) Subscribed news letter?
+        </label>
+    </div>
+    
+    @Html.HiddenFor(m=>m.Customer.Id)
+    <button type="submit" class="btn btn-primary">Save</button>
+
+}   @* add using will create  </Form> tag at here*@
+
+
+
+
