@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Vidly2.Models;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 
 namespace Vidly2.Controllers
 {
@@ -62,6 +63,8 @@ namespace Vidly2.Controllers
         [HttpPost]
         public ActionResult Save(Movie movie)
         {
+
+
             if (movie.Id == 0)  // new movie
             {
                 movie.DateAdded = DateTime.Now;
@@ -77,7 +80,25 @@ namespace Vidly2.Controllers
                 movieInDb.GenreId = movie.GenreId;
             }
 
-            _context.SaveChanges();
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                string sErr= string.Empty;
+                foreach (DbEntityValidationResult r in ex.EntityValidationErrors)
+                {
+                    foreach (DbValidationError e in r.ValidationErrors)
+                    {
+                        sErr = sErr + e.ErrorMessage;
+                    }
+                }
+  
+                throw new Exception(sErr, ex);
+            }
+                
+
 
             return RedirectToAction("Index", "Movies");
         }
