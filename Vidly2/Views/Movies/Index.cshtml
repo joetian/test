@@ -5,11 +5,12 @@
 }
 
 <h2>Movies</h2>
+
+    <a class="btn btn-default btn-lg" href="~/Movies/New">New Movie</a>
+
 <table class="table">
-    <tr><th>Movie </th><th>Genre</th></tr>
-    <div class="jumbotron">
-        <a class="btn btn-default btn-lg" href="~/Movies/New">New Movie</a>
-    </div>
+    <tr><th>Movie </th><th>Genre</th><th>Copies in stock</th></tr>
+
     @foreach (var movie in Model)
     {
         <tr>
@@ -17,6 +18,7 @@
                 @Html.ActionLink(movie.Name, "Edit", new { id = movie.Id }, null)
             </td>
             <td> @movie.Genre.Name</td>
+            <td> @movie.NumberInStock</td>
         </tr>
     }
 </table>
