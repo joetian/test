@@ -7,8 +7,8 @@
 
 <h2>Customers</h2>
 
-<table class="table">
-    <tr><th>Customer </th><th>Membership Type</th></tr>
+<table class="table" id="customers">
+    <tr><th>Customer </th><th>Membership Type</th><th>Delete</th></tr>
     <div class="jumbotron">
         <a class="btn btn-default btn-lg" href="~/Customers/New">New Customer </a>
     </div>
@@ -20,7 +20,33 @@
                 @Html.ActionLink(customer.Name, "Edit", new { id = customer.Id }, null)
             </td>
             <td> @customer.MembershipType.Name</td>
+            <td><button data-customer-id="@customer.Id" class="btn-link js-mydelete">Delete</button></td>
         </tr>
     }
 </table>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#customers").DataTable();
 
+
+            $("#customers .js-mydelete").on("click", function () {
+                var btn = $(this);
+
+                bootbox.confirm("delete this customer?", function(result) {  // call back funciton
+                    if (result) {
+                        $.ajax({
+                            url: "/api/customers/" +  btn.attr("data-customer-id"),
+                            method: "DELETE",
+                            success: function () {
+                                        btn.parents("tr").remove();
+                                        console.log(btn.attr("data-customer-id") + " is deleted");
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}
